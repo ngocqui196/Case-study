@@ -1,8 +1,10 @@
 canvas {
-    width: 535px;
-    height: 380px;
-    border: 1px solid #0012ff;
-    background: url(images.jpg) center center;
-    background-size: cover;
-    position: absolute;
+
+     border: 1px solid #0012ff;
+     background: url(images.jpg) center center;
+     background-size: cover;
+     position: absolute;
+ }
+#start {
+     margin-top: 400px;
 }
