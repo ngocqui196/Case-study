@@ -1,6 +1,11 @@
+let canvas =document.getElementById("myCanvas");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
 let img = document.getElementById("myCanvas").getContext("2d");
 let planes = {};
 let bullet = [];
+let number = 0;
 let count = 0;
 // Khởi tạo lớp máy bay của người chơi;
 function MyPlanes(toaDoX,toaDoY,width,height) {
@@ -35,24 +40,39 @@ function Bullet (x,y,w,h) {
         img.drawImage(this.image,this.x,this.y,this.w,this.h);
     }
 }
+// Khởi tjao lớp máy bay địch
+function EnemyPlanes (toadox,toadoy,wEnemy,hEnemy) {
+    this.image = new Image();
+    this.image.src = "1942-Gameplay1.png"
+    this.dy = 2;
+    this.toadox = toadox;
+    this.toadoy = toadoy;
+    this.wEnemy = wEnemy;
+    this.hEnemy = hEnemy;
+    this.creatPlanesEnemy = function () {
+        this.toadoy += this.dy;
+        img.drawImage(this.image,this.toadox,this.toadoy,this.wEnemy,this.hEnemy);
+    }
+}
 
 window.addEventListener("mousemove", moveMouse);
 function drawAll() {
-    img.clearRect(0,0,535,380);
+    img.clearRect(0,0,canvas.width,canvas.height);
     for (let i = 0; i < bullet.length; i++) {
         bullet[i].creatBullet();
     }
     planes.creatPlanes();
+    for
 }
 // Bắn ra đạn:
 function creatNewBullet() {
-    count++;
-    bullet[count] = new Bullet(planes.getToaDoX() ,planes.getToaDoY(),29,13)
+    number++;
+    bullet[number] = new Bullet(planes.getToaDoX() ,planes.getToaDoY(),29,13)
 }
 function startGame() {
     planes = new MyPlanes(200,200,29,18);
     let moveright = planes.getToaDoX() + 20;
-    bullet[count] = new Bullet(moveright,planes.getToaDoY(),25,18);
+    bullet[number] = new Bullet(moveright,planes.getToaDoY(),25,18);
     setInterval(drawAll,parseFloat("0.001"));
     setInterval(creatNewBullet,100);
 
