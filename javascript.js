@@ -1,8 +1,7 @@
-let canvas =document.getElementById("myCanvas");
-canvas.width = 500;
-canvas.height = 500;
-
 let img = document.getElementById("myCanvas").getContext("2d");
+img.width = 500;
+img.height = 500;
+
 let planes = {};
 let enplanes = [];
 let bullet = [];
@@ -44,16 +43,13 @@ function Bullet (x,y,w,h) {
     this.checkDiem =function (enplanet) {
         let bullet_x = this.x + this.w / 2;
         let bullet_y = this.y + this.h / 2;
-        let check = false;
         if ( Math.abs(enplanet.getXCenter() - bullet_x) < (enplanet.getWidthEnemy() + this.w) / 2
         &&  Math.abs(enplanet.getYCenter() - bullet_y) < enplanet.getHeightEnemy() + this.h / 2) {
             this.y = -100;
             enplanet.toadoy = 2000;
-            check = true;
-        }
-        if (check){
             score++;
         }
+
     };
 
 }
@@ -105,6 +101,7 @@ function drawAll() {
         enplanes[j].creatPlanesEnemy();
         bullet[number].checkDiem(enplanes[j])
     }
+
 }
 // Tạo đối tượng máy bay địch;
 function creatNewEnemy() {
@@ -126,8 +123,7 @@ function startGame() {
     enplanes[count] = new EnemyPlanes(random, -10,27,25);
     setInterval(drawAll,parseFloat("0.001"));
     setInterval(creatNewBullet,300);
-    setInterval(creatNewEnemy,1500);
-
+    setInterval(creatNewEnemy,1000);
 }
 
 function moveMouse(evt) {
