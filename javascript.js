@@ -4,6 +4,7 @@ canvas.height = window.innerHeight;
 
 let img = document.getElementById("myCanvas").getContext("2d");
 let planes = {};
+let enplanes = [];
 let bullet = [];
 let number = 0;
 let count = 0;
@@ -26,7 +27,7 @@ function MyPlanes(toaDoX,toaDoY,width,height) {
     };
 
 }
-  //Khởi tạo lớp đạn:
+//Khởi tạo lớp đạn:
 function Bullet (x,y,w,h) {
     this.image = new Image();
     this.image.src = "dan.png";
@@ -43,8 +44,8 @@ function Bullet (x,y,w,h) {
 // Khởi tjao lớp máy bay địch
 function EnemyPlanes (toadox,toadoy,wEnemy,hEnemy) {
     this.image = new Image();
-    this.image.src = "1942-Gameplay1.png"
-    this.dy = 2;
+    this.image.src = "1942-1.png";
+    this.dy = 0.1;
     this.toadox = toadox;
     this.toadoy = toadoy;
     this.wEnemy = wEnemy;
@@ -57,13 +58,22 @@ function EnemyPlanes (toadox,toadoy,wEnemy,hEnemy) {
 
 window.addEventListener("mousemove", moveMouse);
 function drawAll() {
-    img.clearRect(0,0,canvas.width,canvas.height);
+    img.clearRect(0, 0, canvas.width, canvas.height);
     for (let i = 0; i < bullet.length; i++) {
         bullet[i].creatBullet();
     }
     planes.creatPlanes();
-    for
+    for (let i = 0; i <enplanes.length; i++) {
+        enplanes[i].creatPlanesEnemy();
+    }
 }
+// Tạo đối tượng máy bay địch;
+function creatNewEnemy() {
+    count++;
+    let random = Math.floor(Math.random() * (canvas.width));
+    enplanes[count] = new EnemyPlanes(random, -10,27,25)
+}
+
 // Bắn ra đạn:
 function creatNewBullet() {
     number++;
@@ -71,11 +81,12 @@ function creatNewBullet() {
 }
 function startGame() {
     planes = new MyPlanes(200,200,29,18);
-    let moveright = planes.getToaDoX() + 20;
-    bullet[number] = new Bullet(moveright,planes.getToaDoY(),25,18);
+    bullet[number] = new Bullet(planes.getToaDoX(),planes.getToaDoY(),25,18);
+    let random = Math.floor(Math.random() * (canvas.width));
+    enplanes[count] = new EnemyPlanes(random, -10,27,25);
     setInterval(drawAll,parseFloat("0.001"));
     setInterval(creatNewBullet,100);
-
+    setInterval(creatNewEnemy,1500);
 
 }
 
