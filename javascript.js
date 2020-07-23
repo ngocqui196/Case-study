@@ -1,13 +1,18 @@
 let canvas = document.getElementById("myCanvas").getContext("2d");
 let planes = {};
-let numberPoint = -999999999999999999999999999999999999;
 let enplanes = [];
 let bullet = [];
 let bulletEnemy = [];
+let mang = 1;
+
 
 let number = 0;
 let count = 0;
 let point = 0;
+let timeID;
+let timeID2;
+let timeID3;
+let timeID4;
 
 
 
@@ -32,7 +37,7 @@ function MyPlanes(toaDoX,toaDoY,width,height) {
     };
     this.getHeightMyPlanes = function () {
         return this.height;
-    }
+    };
     this.creatPlanes = function () {
         canvas.drawImage(this.image,this.toadoX,this.toadoY,this.width,this.height)
     };
@@ -57,7 +62,7 @@ function Bullet (x,y,w,h) {
         if ( Math.abs(enplanet.getXCenter() - bullet_x) < (enplanet.getWidthEnemy() + this.w) / 2
             &&  Math.abs(enplanet.getYCenter() - bullet_y) < enplanet.getHeightEnemy() + this.h / 2) {
             this.y = -100;
-            enplanet.toadoy = numberPoint;
+            enplanet.toadoy = 2000;
             score++;
         }
     };
@@ -87,9 +92,17 @@ function EnemyPlanes (toadox,toadoy,wEnemy,hEnemy) {
         return this.hEnemy;
     };
     this.creatPlanesEnemy = function () {
+        if (score > 30) {
+            this.toadoy += (this.dy * 3);
+        }else if (score > 20 ) {
+            this.toadoy += this.dy * 2;
+        }else if (score >10) {
+            this.toadoy += this.dy *1.5;
+        }else{
         this.toadoy += this.dy;
-        if (this.toadoy >= 500) {
-            alert("GameOver")
+        }
+        if (this.toadoy >= 500 && this.toadoy < 1000) {
+            mang--;
         }
         canvas.drawImage(this.image,this.toadox,this.toadoy,this.wEnemy,this.hEnemy);
     }
@@ -98,9 +111,9 @@ function EnemyPlanes (toadox,toadoy,wEnemy,hEnemy) {
 // Khởi tạo lớp đạn địch:
 function BulletEnemy (x,y,w,h){
     this.image = new Image();
-    this.image.src = "bullet.png"
+    this.image.src = "bullet.png";
     this.bulletY = 0.3;
-    this.bulletX = 0.3;
+    this.bulletX = 0.1;
     this.bulletXEnemy = x;
     this.bulletYEnemy = y;
     this.bulletWEnemy = w;
@@ -110,7 +123,7 @@ function BulletEnemy (x,y,w,h){
     };
     this.getYBullet = function () {
         return this.bulletYEnemy;
-    }
+    };
     this.creatEnemyBullet = function (df) {
             if (df.getXCenter() <= 250){
             this.bulletYEnemy += this.bulletY;
@@ -122,18 +135,15 @@ function BulletEnemy (x,y,w,h){
         }
         canvas.drawImage(this.image,this.bulletXEnemy,this.bulletYEnemy,this.bulletWEnemy,this.bulletHEnemy);
         this.checkGameOver = function (planesenemy) {
-            // let bullet_enemy_x = this.bulletXEnemy + this.bulletWEnemy / 2;
-            // let bullet_enemy_y = this.bulletYEnemy + this.bulletHEnemy / 2;
-            console.log(parseInt(planesenemy.getToaDoX()) , 1)
-            console.log(parseInt(this.getXBullet()) , 2)
-            // if ((planesenemy.getToaDoX()) === (this.getXBullet())) {
-            //     alert('Game over')
-            // }
+            let bullet_enemy_x = this.bulletXEnemy + this.bulletWEnemy / 2;
+            let bullet_enemy_y = this.bulletYEnemy + this.bulletHEnemy / 2;
 
-            // if (Math.abs(planesenemy.getToaDoX() - bullet_enemy_x) < (planesenemy.getWidthMyPlanes() + this.bulletXEnemy) / 2
-            // && Math.abs(planesenemy.getToaDoY() - bullet_enemy_y) <  (planesenemy.getHeightMyPlanes() + this.bulletYEnemy) / 2) {
-            //     alert("Game Over")
-            // }
+
+            if (Math.abs(planesenemy.getToaDoX() - bullet_enemy_x) < (planesenemy.getWidthMyPlanes() + this.bulletWEnemy) / 2
+            && Math.abs(planesenemy.getToaDoY() - bullet_enemy_y) < (planesenemy.getHeightMyPlanes() +  this.bulletHEnemy) / 2
+            ) {
+                mang--;
+            }
         }
 
     }
@@ -150,7 +160,7 @@ function drawAll() {
         for (let j = 0; j <enplanes.length ; j++) {
             bullet[i].checkDiem(enplanes[j]);
 
-        }git add .constructor
+        }
     }
     planes.creatPlanes();
     for (let i = 0; i <enplanes.length; i++) {
@@ -158,12 +168,14 @@ function drawAll() {
 
     }
     for (let i = 0; i <bulletEnemy.length; i++) {
-        bulletEnemy[i].creatEnemyBullet(enplanes[i]);
+        for (let j = 0; j < 5; j++) {
+            let random = Math.floor(Math.random() * (500));
+            setTimeout(bulletEnemy[i].creatEnemyBullet(enplanes[i]), random)
+        }
             bulletEnemy[i].checkGameOver(planes);
 
-
     }
-
+    GameOver(mang);
 }
 // Tạo đối tượng máy bay địch;
 function creatNewEnemy() {
@@ -191,11 +203,23 @@ function startGame() {
      bulletEnemy[point] = new BulletEnemy (enplanes[count].getXCenter(),enplanes[count].getYCenter(),6,6);
 
 
-    setInterval(drawAll,parseFloat("0.001"));
-    setInterval(creatNewBullet,300);
-    setInterval(creatNewEnemy,1000);
-    setInterval(creatBulletEnemy,1000);
+    timeID = setInterval(drawAll,parseFloat("0.001"));
+    timeID2 = setInterval(creatNewBullet,300);
+    timeID3 = setInterval(creatNewEnemy,700);
+    timeID4 = setInterval(creatBulletEnemy,1000);
 
+}
+function GameOver(mang) {
+if (mang === 0) {
+    clearInterval(timeID);
+    clearInterval(timeID2);
+    clearInterval(timeID3);
+    clearInterval(timeID4);
+    let view = alert("Game Over, Điểm số của bạn là: " + score);
+    if (view) {
+        window.location.reload();
+    }
+}
 }
 
 function moveMouse(evt) {
