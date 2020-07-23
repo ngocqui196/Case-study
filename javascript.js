@@ -105,7 +105,17 @@ function EnemyPlanes (toadox,toadoy,wEnemy,hEnemy) {
             mang--;
         }
         canvas.drawImage(this.image,this.toadox,this.toadoy,this.wEnemy,this.hEnemy);
+    };
+    this.checkGameOver2 = function (enplanes) {
+        let planes_x = this.toadox + this.wEnemy / 2;
+        let planes_y = this.toadoy + this.hEnemy / 2;
+        if (Math.abs(enplanes.getToaDoX() - planes_x) < (enplanes.getWidthMyPlanes() + this.wEnemy) / 2
+            && Math.abs(enplanes.getToaDoY() - planes_y) < (enplanes.getHeightMyPlanes() +  this.hEnemy) / 2
+        ) {
+            mang--;
+        }
     }
+
 }
 
 // Khởi tạo lớp đạn địch:
@@ -137,8 +147,6 @@ function BulletEnemy (x,y,w,h){
         this.checkGameOver = function (planesenemy) {
             let bullet_enemy_x = this.bulletXEnemy + this.bulletWEnemy / 2;
             let bullet_enemy_y = this.bulletYEnemy + this.bulletHEnemy / 2;
-
-
             if (Math.abs(planesenemy.getToaDoX() - bullet_enemy_x) < (planesenemy.getWidthMyPlanes() + this.bulletWEnemy) / 2
             && Math.abs(planesenemy.getToaDoY() - bullet_enemy_y) < (planesenemy.getHeightMyPlanes() +  this.bulletHEnemy) / 2
             ) {
@@ -165,14 +173,16 @@ function drawAll() {
     planes.creatPlanes();
     for (let i = 0; i <enplanes.length; i++) {
         enplanes[i].creatPlanesEnemy();
-
+        enplanes[i].checkGameOver2(planes);
     }
     for (let i = 0; i <bulletEnemy.length; i++) {
         for (let j = 0; j < 5; j++) {
             let random = Math.floor(Math.random() * (500));
-            setTimeout(bulletEnemy[i].creatEnemyBullet(enplanes[i]), random)
+            console.log(random);
+            setTimeout(bulletEnemy[i].creatEnemyBullet(enplanes[i]), random);
         }
             bulletEnemy[i].checkGameOver(planes);
+
 
     }
     GameOver(mang);
@@ -180,7 +190,7 @@ function drawAll() {
 // Tạo đối tượng máy bay địch;
 function creatNewEnemy() {
     count++;
-    let random = Math.floor(Math.random() * (500));
+    let random = Math.floor(Math.random() * (463));
     enplanes[count] = new EnemyPlanes(random, -10,27,25)
 }
 
